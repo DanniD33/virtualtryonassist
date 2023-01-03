@@ -4,5 +4,6 @@ import getUser from "../controller/userController.js";
 //localhost:3000/users
 const router = express.Router();
 const successfullyGotUsers = router.get('/', getUser);
+// const generateSpecs = router.post('/mySpecs', mySize);
 
 export default successfullyGotUsers;

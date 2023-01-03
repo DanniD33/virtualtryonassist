@@ -6,6 +6,8 @@ import tf from '@tensorflow/tfjs-node';
 //tf.model = graphs a group of layers as they dont have cycles
 //tf.sequential = linear stack of layers
 
+
+//Load simple model
 const loadModel = () => {
   //created a 2-D model 11:52 2022-11-16
   const model = tf.sequential();
@@ -26,5 +28,10 @@ const loadModel = () => {
     }
   });
 };
-// loadModel();
+
+
+//create a function that captures webcam and outputs a tensor
+
+
+
 export default loadModel;
