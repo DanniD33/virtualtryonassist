@@ -1,6 +1,8 @@
 import express from 'express';
 import tf from '@tensorflow/tfjs-node';
 
+
+//we will need to import webcam.js outp and turnit into a model in this folder
 //create model; we are going to derve this back
 
 //tf.model = graphs a group of layers as they dont have cycles
