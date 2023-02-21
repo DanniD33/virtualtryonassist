@@ -38,11 +38,16 @@
     
     <p>Wait for the model to load before clicking the button to enable the webcam - at which point it will become visible to use.</p>
     
-    <section id="demos" class="invisible">  
-      <div id="liveView" class="camView">
-        <video id="webcamSpace" playsinline autoplay width="640" height="480"></video>
+    <section id="webcamcapture">  
+      <!-- <div id="liveView" class="camView"> -->
+        <div>
+          <!-- <canvas id = "video" width="700" height = "500"> -->
+
+            <video id = "video" autoplay= "true" width="640" height="480"></video>
+          </canvas>
       </div>
-      <button onclick = "loadWebcam()"> Enable Me</button>
+      <button onclick = "loadWebcam()" > Enable Me</button>
+      <button onclick = "stopStream()"> Stop Me</button>
     </section>
     
     
@@ -56,24 +61,44 @@
     <script type = "module" src="webcamserver.js"></script>
     <script>
       const loadWebcam = () => {
+        // let currentEl = document.getElementById("video");
+          let vidEl = document.getElementById("video");
+        if (navigator.mediaDevices.getUserMedia){
         navigator.mediaDevices.getUserMedia({video: true})
         .then((stream) => {
           //whatever is returned from our intial getUserMedia request will be the contents of our stream; 
-          let vidEl = document.createElement("video")
-          stream = video.srcObject 
+          video.srcObject = stream;
+           
           // let tracks = stream.getTracks();
-          let playVid = document.getElementById("video")
-          playVid.play();
-          // tracks.play()
-          // console.log(stream)
-
-          
+          // let playVid = document.getElementById("video")
+          // playVid.play();
         })
         .catch((error) => {
-          console.error();
+          console.log(error);
         })
+        } else{
+          console.log("Navigator not supported on this device");
+        }
       }
     </script>
-
+    <!-- <script>  
+    const stopStream = () => {
+      navigator.mediaDevices.getUserMedia({video: true})
+      .then(mediaStream => {
+        // const stream = mediaStream;
+        const mediaRecorder = new MediaRecorder(stream);
+        const myStream = mediaRecorder.stream;
+        // const tracks = stream.getTracks();
+        // tracks[0].stop;
+        // console.log(myStream);
+      }
+        catch (err) {
+          if (er){
+            console.error(err)
+          }
+          console.log(err);
+      }
+    }
+    </script> -->
   </body>
 </html>
