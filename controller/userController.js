@@ -3,14 +3,17 @@ import express from "express";
 import tf from "@tensorflow/tfjs-node";
 import loadModel from "../tensorModel/model.js";
 import path from "path";
+import * as webcamserver from "../image/webcam/webcamserver.js"
 // import captureVideo from "../tensorModel/model.js";
 
 
 const getUser = ('/', (req, res) => {
 
-
-
-res.send(loadModel()); 
+let user = ['Danni', webcamserver];
+res.send(user);
+// res.send(loadModel()); 
+// res.send(alert('incoming webcamPrompt'));
+// res.send('hi', webcamserver);
 
 
 // let epochData = [];

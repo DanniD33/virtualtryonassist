@@ -68,10 +68,14 @@
         .then((stream) => {
           //whatever is returned from our intial getUserMedia request will be the contents of our stream; 
           video.srcObject = stream;
-           
+          video.addEventListener('streamLoaded', predictWebcam)
           // let tracks = stream.getTracks();
           // let playVid = document.getElementById("video")
           // playVid.play();
+          const predictWebcam = () => {
+          let model = undefined;
+            
+          }
         })
         .catch((error) => {
           console.log(error);
