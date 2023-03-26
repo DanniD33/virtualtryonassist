@@ -1,154 +1,108 @@
-// //require getusermedia
-//   //look into options and adjust as necessary
-//   // const express = require('express');
-
-// import { type } from "os";
-
-// import getusermedia from 'getusermedia';
-// import express from 'express';
-
-
-// //access getusmethod and its options
-// function loadUserVideo(){
-
-// navigator.mediaDevices.getusermedia({
-//     video:true,
-//     audio:false
-//   },
-//   function(err, stream){
-//     if (err) console.log(err);
-//     document.querySelector('webcamButton').addEventListener('click', async (e) => {
-//       const stream = await navigator.mediaDevices.getUserMedia({
-//         video: true
-//       })
-//     })
-//     //display video in the broswer 
-//       //create an element
-//         //push video element into the body
-//     const video = document.createElement('video');
-//     document.body.appendChild(video);
-    
-//     video.srcObject = stream;
-//     video.play();
-//   }
-//   );
-// }
-
-// export default loadUserVideo;
-
-//   // export default getusermedia;
+const video = document.getElementById('webcam');
+const liveView = document.getElementById('liveView');
+const demosSection = document.getElementById('demos');
+const enableWebcamButton = document.getElementById('webcamButton');
 
 
 
+//First Check to see if we are able to get webcam using getUserMedia 
+function getUserMediaSupported() {
+  return !!(navigator.mediaDevices &&
+    navigator.mediaDevices.getUserMedia);
+}
+  //If we CAN get access to camera, create an event listener for our Try Me On button that once clicked, starts to run our function
+if (getUserMediaSupported()) {
+  enableWebcamButton.addEventListener('click', enableCam);
+  //If we CANNOT get access to camera, send back a message saying not supported 
+} else {
+  console.warn('getUserMedia() is not supported by your browser');
+}
 
-// const loadWebcam = () => {
-//   navigator.mediaDevices.getUserMedia(
-//     {
-//       video: true, 
-//       audio: false
-//     }
-//   ).then(
-//     //create video element
-//     let vid = Document.createElementId("vid") 
-        //trigger play or on
-//   )
-// }
+//Once we hear the event, our function will load tensor api , we will began the stream of our webcam then need to break our stream into frames that we can then pass into our predictWebcam   
 
+let model;
+let children = [];
 
+function enableCam(event) {
 
-
-
-
-
-// const webcam = () => {
-
-
-
-// if (typeof document !== "undefined"){
- 
-//   const video = document.getElementById('webcam');
-//   const liveView = document.getElementById('liveView');
-//   const demosSection = document.getElementById('demos');
-//   const enableWebcamButton = document.getElementById('webcamButton');
-//   const errorMsgElement = document.querySelector('span#errorMsg');
-//   // vendorURL = window.URL || window.webkitURL;
-
-// const constraints = {
-//   video: {
-//     width: 1280, height: 720
-//   },
-//   audio: false
-
-// }
-
-// async function init(){
-//   try{
-//     const stream = await navigator.mediaDevices.getUserMedia(constraints);
-//     handleSuccess(stream);
-//   } catch (err){
-//     errorMsgElement.innerHTML = `naviagtor.getUSerMedia error:${err.toString()}`;
-//   }
-// }
-// function handleSuccess(stream) {
-//     window.stream = stream;
-//     video.srcObject = stream;
-// }
-// // init();
-
-//   // navigator.getMedia = navigator.getUserMedia ||
-//   // navigator.webkitGetUserMedia ||
-//   // navigator.msGetUserMedia;
+  cocoSsd.load().then(function (loadedModel){
+    model = loadedModel;
+    demosSection.classList.remove('invisible');
+  });
   
-//   // navigator.getMedia({
-//   //   video: true,
-//   //   audio: false
-//   // }, function(stream) {
-//   //   video.src = vendorURL.createObjectURL(stream);
-//   //   video.play();
-//   // }, function(error) {
-//   //   console.log(error)
-//   //   //an error occured
-//   //   //error.code
-//   // });   
-// }
-// };
-const webcam = () => {
-  // if (typeof window !== 'undefined'){
-    //   console.log('You are on browser');
-    // }else{
-      //   console.log('You are on the server');
-      // }
-    document.getElementById("webcamButton").onclick(sayHi); 
-
-    function sayHi(){
-
-      alert('Please select your preferences');
-    }
+  event.target.classList.add('removed'); 
   
-  // console.log('working from Port 8080 button onclick');
-};
-export default webcam;
+  const constraints = {
+    video: true
+  };
+  
+  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    video.srcObject = stream;
+    video.addEventListener('loadeddata', predictWebcam);
+  });
+  
+  demosSection.classList.remove('invisible');
 
 
-// Check if webcam access is supported.
-// function getUserMediaSupported() {
-//   return !!(navigator.mediaDevices &&
-//     navigator.mediaDevices.getUserMedia);
-// }
+  //create predict Webcam, which when model detects that a video exists, will then run a function that create an array of frames, takes in that entire array, and grabs each frames from our webcam and passes it to the model to be classified
+    //What does classify mean? --> 
+      //the current frame is passed through a prediction function that returns whether the current frame's score (.score is a property on a model in tensor) is oover 66%
 
-// // If webcam supported, add event listener to button for when user
-// // wants to activate it to call enableCam function which we will 
-// // define in the next step.
-// if (getUserMediaSupported()) {
-//   enableWebcamButton.addEventListener('click', enableCam);
-// } else {
-//   console.warn('getUserMedia() is not supported by your browser');
-// }
+    function predictWebcam() {
+      // Now let's start classifying a frame in the stream.
+      model.detect(video).then(function (predictions) {
+        // Remove any highlighting we did previous frame.
+        for (let i = 0; i < children.length; i++) {
+        //LiveView is the entire section under the Id = "liveView" which contains our video webcam in and of itself  +  Try Me On button 
+        liveView.removeChild(children[i]);
+      }
+      //remove frame from DOM and from Memory after its classified; We can still reference a copy of the frame but its otherwise deleted as long as we have a parent node (aka liveView), we can draw from 
 
-// // Placeholder function for next step. Paste over this in the next step.
-// function enableCam(event) {
-//   if (!model) {
-//     return;
-// }
+        children.splice(0); //copy of the rest of the frames that haven't been classified
+
+        // Now lets loop through predictions and draw them to the live view if
+        // they have a high confidence score.
+        for (let n = 0; n < predictions.length; n++) {
+          // If our current frame is over 66% sure we are able to detect a classifiable item and that the detection is right, so draw it!
+          
+            if (predictions[n].score > 0.66) {
+                //we'll add a new element to our DOM that displays the a message letting us know what our prediction is and the confidence
+            
+            const p = document.createElement('p');
+            
+            p.innerText = predictions[n].class  + ' - with ' 
+                + Math.round(parseFloat(predictions[n].score) * 100) 
+                + '% confidence.';
+            p.style = 'margin-left: ' + predictions[n].bbox[0] + 'px; margin-top: '
+                + (predictions[n].bbox[1] - 10) + 'px; width: ' 
+                + (predictions[n].bbox[2] - 10) + 'px; top: 0; left: 0;';
+              //Here we can highlight the detected area but for some reason the highlight isn't visible
+            
+            
+              const highlighter = document.createElement('div');
+            highlighter.setAttribute('class', 'highlighter');
+            highlighter.style = 'left: ' + predictions[n].bbox[0] + 'px; top: '
+                + predictions[n].bbox[1] + 'px; width: ' 
+                + predictions[n].bbox[2] + 'px; height: '
+                + predictions[n].bbox[3] + 'px;';
+            
+
+            
+            liveView.appendChild(highlighter);
+            liveView.appendChild(p);
+            children.push(highlighter);
+            children.push(p);
+          }
+        }
+        
+        // Call this function again to keep predicting when the browser is ready.
+        window.requestAnimationFrame(predictWebcam);
+      });
+}
+}
 
 
+
+//we need objetDetection
+//we need posenetAPI
+//Layered on top hand pose api

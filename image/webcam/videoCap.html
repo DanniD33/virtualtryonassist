@@ -1,108 +1,31 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Webcam</title>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Video</title>
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 </head>
 <body>
-  <p>Welcome to Webcam</p>
+  <h1>Welcome to Webcam</h1>
   <section id="demos" class="invisible">
 
     <p>Hold some objects up close to your webcam to get a real-time classification! When ready click "enable webcam" below and accept access to the webcam when the browser asks (check the top left of your window)</p>
     
-    <div id="liveView" class="webcam">
-      <button id="webcamButton">Enable Webcam</button>
+    <div id="liveView" class="webcamClass">
+      <button id="webcamButton">Try Me On</button>
       <video id="webcam" autoplay width="640" height="480"></video>
     </div>
   </section>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script> -->
+  <!-- imports tensorflow library -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
-  <script type = "module" src = "./webcam.js"></script>
-  <video id="webcam" autoplay playsinline width ="800" height = "600" ></video> -->
+  <!-- Import coco-SSD model from tensorFlow.js prebuilt models-->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    
+  <script src = "./webcam.js" defer></script>
+  <!-- <video id="webcam" autoplay playsinline width ="800" height = "600" ></video> -->
   <!-- <input type = "button" onclick = "loadUserVideo()" value = "Display"> -->
-<!-- </body> -->
-<!-- </html> --> 
+</body>
+</html> 
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Webcam</title>
-    <meta charset="utf-8">
-    <!-- Import the webpage's stylesheet -->
-    <link rel="stylesheet" href="style.css">
-  </head>  
-  <body>
-    <h1>Let's Get You in Frame</h1>
-    
-    <p>Wait for the model to load before clicking the button to enable the webcam - at which point it will become visible to use.</p>
-    
-    <section id="webcamcapture">  
-      <!-- <div id="liveView" class="camView"> -->
-        <div>
-          <!-- <canvas id = "video" width="700" height = "500"> -->
-
-            <video id = "video" autoplay= "true" width="640" height="480"></video>
-          </canvas>
-      </div>
-      <button onclick = "loadWebcam()" > Enable Me</button>
-      <button onclick = "stopStream()"> Stop Me</button>
-    </section>
-    
-    
-    <!-- Import TensorFlow.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
-    <!-- Load the coco-ssd model to use to recognize things in images -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
-    
-    <!-- Import the page's JavaScript -->
-    <script type = "module" src="webcam.js"></script>
-    <script type = "module" src="webcamserver.js"></script>
-    <script>
-      const loadWebcam = () => {
-        // let currentEl = document.getElementById("video");
-          let vidEl = document.getElementById("video");
-        if (navigator.mediaDevices.getUserMedia){
-        navigator.mediaDevices.getUserMedia({video: true})
-        .then((stream) => {
-          //whatever is returned from our intial getUserMedia request will be the contents of our stream; 
-          video.srcObject = stream;
-          video.addEventListener('streamLoaded', predictWebcam)
-          // let tracks = stream.getTracks();
-          // let playVid = document.getElementById("video")
-          // playVid.play();
-          const predictWebcam = () => {
-          let model = undefined;
-            
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        } else{
-          console.log("Navigator not supported on this device");
-        }
-      }
-    </script>
-    <!-- <script>  
-    const stopStream = () => {
-      navigator.mediaDevices.getUserMedia({video: true})
-      .then(mediaStream => {
-        // const stream = mediaStream;
-        const mediaRecorder = new MediaRecorder(stream);
-        const myStream = mediaRecorder.stream;
-        // const tracks = stream.getTracks();
-        // tracks[0].stop;
-        // console.log(myStream);
-      }
-        catch (err) {
-          if (er){
-            console.error(err)
-          }
-          console.log(err);
-      }
-    }
-    </script> -->
-  </body>
-</html>
