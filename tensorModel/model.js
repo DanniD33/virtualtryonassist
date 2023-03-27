@@ -1,6 +1,6 @@
 import express from 'express';
 import tf from '@tensorflow/tfjs-node';
-
+//we will 
 
 //we will need to import webcam.js outp and turnit into a model in this folder
 //create model; we are going to derve this back
@@ -26,7 +26,7 @@ const loadModel = () => {
   model.fit(xs, ys, {
     epochs: 100,
     callbacks: {
-      onEpchEnd: (epch, log) => console.log(`Epoch ${epoch}: loss = ${log.loss}`)
+      onEpochEnd: (epch, log) => console.log(`Epoch ${epoch}: loss = ${log.loss}`)
     }
   });
 };

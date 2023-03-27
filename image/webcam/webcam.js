@@ -3,6 +3,8 @@ const liveView = document.getElementById('liveView');
 const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
 
+//LSTM layer: Best way to describe it is like  a  mini  recording of a neural network; We are able to look back  at prior detections of hand (flattened array of frames(x,)) to  make a prediction  
+
 
 
 //First Check to see if we are able to get webcam using getUserMedia 

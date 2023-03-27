@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>Webcam</title>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" content="application/javascript">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 </head>
 <body>
@@ -16,14 +16,14 @@
       <video id="webcam" autoplay width="640" height="480"></video>
     </div>
   </section>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
   <!-- imports tensorflow library -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>
   <!-- Import coco-SSD model from tensorFlow.js prebuilt models-->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
     
-  <script src = "./webcam.js" defer></script>
+  <script type = "application/javascript" src = "./webcam.js" defer></script>
   <!-- <video id="webcam" autoplay playsinline width ="800" height = "600" ></video> -->
   <!-- <input type = "button" onclick = "loadUserVideo()" value = "Display"> -->
 </body>
