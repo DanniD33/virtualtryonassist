@@ -2,7 +2,7 @@
   "name": "virtualtryon",
   "version": "1.0.0",
   "description": "virtual tryon assist using tensorflow.js",
-  "main": "app.js",
+  "main": "endpoints.js",
   "type": "module",
   "scripts": {
     "start": "nodemon server/endpoints.js",
@@ -12,6 +12,9 @@
   "license": "ISC",
   "devDependencies": {
     "@tensorflow/tfjs-node": "^4.1.0",
-    "nodemon": "^2.0.20"
+    "getusermedia": "^2.0.1",
+    "nodemon": "^2.0.20",
+    "postgres": "^3.3.4",
+    "postgresql": "^0.0.1"
   }
 }
