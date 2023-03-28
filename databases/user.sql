@@ -4,7 +4,7 @@ CREATE TABLE Users (
   email VARCHAR(32) NOT NULL,
   birthday VARCHAR(10),
   CAM BOOLEAN
-  created_at 
+  created_at DATE
 );
 
 -- const user = {

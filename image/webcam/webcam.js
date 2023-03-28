@@ -25,13 +25,29 @@ if (getUserMediaSupported()) {
 let model;
 let children = [];
 
-function enableCam(event) {
+async function enableCam(event) {
 
   cocoSsd.load().then(function (loadedModel){
     model = loadedModel;
     demosSection.classList.remove('invisible');
   });
+
+//   //load and initialize POSE model
+// model = poseDetection.SupportedModels.BlazePose;
+
+// const detectorConfig = {
+//   runtime: 'tfjs',
+//   enableSmoothing: true,
+//   modelType: 'full'
+// };
+
+// let detector = await poseDetection.createDetector(model, detectorConfig);
   
+// const estimationConfig = {flipHorizontal: true};
+// const timestamp = performance.now();
+// const poses = await detector.estimatePoses(image, estimationConfig, timestamp);
+
+
   event.target.classList.add('removed'); 
   
   const constraints = {
