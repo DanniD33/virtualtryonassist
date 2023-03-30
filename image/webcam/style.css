@@ -10,7 +10,9 @@ h1 {
 }
 
 video {
-  display: block;
+  width: 640px;
+  height: 480px;
+  /* display: block; */
 }
 
 section {
