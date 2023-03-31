@@ -1,4 +1,5 @@
 const video = document.getElementById('webcam');
+const canvas = document.querySelector('canvas');
 const liveView = document.getElementById('liveView');
 const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
@@ -7,18 +8,48 @@ const enableWebcamButton = document.getElementById('webcamButton');
 
 
 
-//First Check to see if we are able to get webcam using getUserMedia 
+
+/*
+1.) First Check to see if we are able to get webcam using getUserMedia 
+
+2.)If we CAN get access to camera, create an event listener for our Try Me On button 
+that once clicked, starts to run our function
+
+3.)If we CANNOT get access to camera, send back a message saying not supported 
+*/
+
 function getUserMediaSupported() {
   return !!(navigator.mediaDevices &&
     navigator.mediaDevices.getUserMedia);
 }
-  //If we CAN get access to camera, create an event listener for our Try Me On button that once clicked, starts to run our function
-if (getUserMediaSupported()) {
+      if (getUserMediaSupported()) {
   enableWebcamButton.addEventListener('click', enableCam);
-  //If we CANNOT get access to camera, send back a message saying not supported 
 } else {
-  console.warn('getUserMedia() is not supported by your browser');
+  console.log('getUserMedia() is not supported by your browser');
 }
+//In this code block (25), we,'ll draw the  stream from   our webcam to the canvas
+const width = 640;
+const height = 480;
+let canvasInterval = null;
+const drawImage = (video) => {
+  canvas.getContext('2d', { alpha: false }).drawImage(video, 0, 0, width, height);
+};
+canvasInterval = window.setInterval(() => {
+  drawImage(video);
+}, 1000);
+video.onpause = function() {
+  clearInterval(canvasInterval);
+};
+video.onended = function() {
+  clearInterval(canvasInterval);
+};
+video.onplay = function() {
+  clearInterval(canvasInterval);
+  canvasInterval = window.setInterval(() => {
+    drawImage(video);
+  }, 1000 );
+};
+
 
 //Once we hear the event, our function will load tensor api , we will began the stream of our webcam then need to break our stream into frames that we can then pass into our predictWebcam   
 
@@ -27,39 +58,43 @@ let children = [];
 
 async function enableCam(event) {
 
-  cocoSsd.load().then(function (loadedModel){
-    model = loadedModel;
-    demosSection.classList.remove('invisible');
-  });
+  // cocoSsd.load().then(function (loadedModel){
+  //   model = loadedModel;
+  //   demosSection.classList.remove('invisible');
+  // });
 
-//   //load and initialize POSE model
-// model = poseDetection.SupportedModels.BlazePose;
 
-// const detectorConfig = {
-//   runtime: 'tfjs',
-//   enableSmoothing: true,
-//   modelType: 'full'
-// };
-
-// let detector = await poseDetection.createDetector(model, detectorConfig);
   
-// const estimationConfig = {flipHorizontal: true};
-// const timestamp = performance.now();
-// const poses = await detector.estimatePoses(image, estimationConfig, timestamp);
+const detector = await poseDetection.createDetector(poseDetection.SupportedModels.BlazePose, {runtime:'tfjs', solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/pose'});
+
+const poses = await detector.estimatePoses(canvas);
 
 
-  event.target.classList.add('removed'); 
+  // event.target.classList.add('removed'); 
   
+
+
+  // Load stream from webcam using getUserMedia api
   const constraints = {
-    video: true
+    'video': {
+      width:'640',
+      height:'480'
+    }
   };
+    // video.videoWidth = 640;
+    // video.videoHeight = 480;
   
-  navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+  await navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
     video.srcObject = stream;
-    video.addEventListener('loadeddata', predictWebcam);
   });
   
-  demosSection.classList.remove('invisible');
+
+  video.addEventListener('loadeddata', predictWebcam);
+
+}
+
+
+
 
 
   //create predict Webcam, which when model detects that a video exists, will then run a function that create an array of frames, takes in that entire array, and grabs each frames from our webcam and passes it to the model to be classified
@@ -68,7 +103,8 @@ async function enableCam(event) {
 
     function predictWebcam() {
       // Now let's start classifying a frame in the stream.
-      model.detect(video).then(function (predictions) {
+      model.detect(canvas).then(function (predictions) {
+      // model.detect(canvas.captureStream()).then(function (predictions) {
         // Remove any highlighting we did previous frame.
         for (let i = 0; i < children.length; i++) {
         //LiveView is the entire section under the Id = "liveView" which contains our video webcam in and of itself  +  Try Me On button 
@@ -116,10 +152,9 @@ async function enableCam(event) {
         // Call this function again to keep predicting when the browser is ready.
         window.requestAnimationFrame(predictWebcam);
       });
-}
-}
-
-
+    }
+    
+    
 
 //we need objetDetection
 //we need posenetAPI
