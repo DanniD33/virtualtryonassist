@@ -10,9 +10,9 @@ h1 {
 }
 
 video {
-  width: 640px;
-  height: 480px;
-  /* display: block; */
+  /* width: 640px;
+  height: 480px; */
+  display: block;
 }
 
 section {
@@ -22,6 +22,7 @@ section {
 
 .removed {
   display: none;
+  z-index: -10;
 }
 
 .invisible {
@@ -44,6 +45,14 @@ section {
   border: 1px dashed rgba(255, 255, 255, 0.7);
   z-index: 2;
   font-size: 12px;
+}
+
+#canvas {
+  position: absolute;
+  z-index: -100;
+  top: 0; 
+  bottom: 0; 
+  left: 0; 
 }
 
 .highlighter {
