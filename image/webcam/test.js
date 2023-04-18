@@ -1,156 +1,110 @@
+
 const video = document.getElementById('webcam');
-const canvas = document.querySelector('canvas');
+const canvas = document.getElementById('canvas');
 const liveView = document.getElementById('liveView');
 const demosSection = document.getElementById('demos');
 const enableWebcamButton = document.getElementById('webcamButton');
 let ctx = canvas.getContext('2d');
+let poses; 
 
-let detector, model;
-const scoreThreshold = 0.6;
+// Get HTML head element
+var head = document.getElementsByTagName('HEAD')[0];
+ 
+// Create new link Element
+var link = document.createElement('link');
 
-async function createDetector() {
+// set the attributes for link element
+link.rel = 'stylesheet';
+
+link.type = 'text/css';
+
+link.href = 'style.css';
+
+// Append link element to HTML head
+head.appendChild(link);
+
+function getUserMediaSupported() {
+    return !!(navigator.mediaDevices &&
+      navigator.mediaDevices.getUserMedia);
+} 
+if (getUserMediaSupported()) {
+    enableWebcamButton.addEventListener('click', enableCam);
+} else {
+  console.warn('getUserMedia() is not supported by your browser');
+}
+  
+// Enable the live webcam view and start classification.
+async function enableCam(event) {
+  if (!model) {
+    console.log('model not found');
+    return;
+  }
+  // getUsermedia parameters to force video but not audio.
+  const constraints = {
+    video: true
+  };
+  // document.getElementById('canvas').style.zIndex = "6";
+  // Activate the webcam stream.
+  await navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+    video.srcObject = stream;
+    video.addEventListener('loadeddata', predictWebcam);
+    // Hide the button once clicked.
+    event.target.classList.add('removed');  
+  });
+}
+
+async function predictWebcam() {
+  
+  const videoHeight = video.videoHeight;
+  const videoWidth = video.videoWidth;
+  
+  video.width = videoWidth;
+  video.height = videoHeight;
+  canvas.width = videoWidth;
+  canvas.height = videoHeight;
+  
+  // Store the resulting model in the global scope of our app.
+  let model = undefined;
+  let detector = undefined; 
+  // Before we can use BlazePose class we must wait for it to finish
+  async function loadModel(){
     model = poseDetection.SupportedModels.BlazePose;
     const detectorConfig = {
-        runtime: "tfjs",
-        enableSmoothing: true,
-        modelType: "full"
+      runtime: 'tfjs',
+      enableSmoothing: true,
+      modelType: 'full'
     };
     detector = await poseDetection.createDetector(model, detectorConfig);
+    demosSection.classList.remove('invisible');
+  }
+  poses = await detector.estimatePoses(canvas);   
+  // ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+  
+  if(poses && poses.length > 0){
+    for(const pose of poses){
+      if(pose.keypoints != null){
+        drawKeypoints(pose.keypoints);
+      }
+    }
+  }
+  window.requestAnimationFrame(predictWebcam);
 }
 
-async function activateVideo() {
-    if(navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({'video': {
-            width: '640',
-            height: '480'
-        }}).then(stream => {
-                video.srcObject = stream;
-            })
-            .catch(e => {
-                console.log("Error occurred while getting the video stream");
-            });
-    }
-    
-    video.onloadedmetadata = () => {
-        const videoWidth = video.videoWidth;
-        const videoHeight = video.videoHeight;
-
-        video.width = videoWidth;
-        video.height = videoHeight;
-        canvas.width = videoWidth;
-        canvas.height = videoHeight;  
-        
-        // Because the image from camera is mirrored, need to flip horizontally.
-        ctx.translate(videoWidth, 0);
-        ctx.scale(-1, 1);
-    };
-
-    video.addEventListener("loadeddata", predictPoses);   
+function drawKeypoints(keypoints){
+  
+  for(let i = 0; i < keypoints.length; i++){
+    drawKeypoint(keypoints[i]);
+  }
+  
 }
 
-async function predictPoses() {
-    let poses = null;
-    
-    if (detector != null) {
-        try {
-            poses = await detector.estimatePoses(video, { 
-                flipHorizontal: false 
-            });
-        } catch (error) {
-            detector.dispose();
-            detector = null;
-            alert(error);
-        }
-    }
-
-    ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-
-    if (poses && poses.length > 0) {
-        for (const pose of poses) {
-            if (pose.keypoints != null) {
-                drawKeypoints(pose.keypoints);
-                drawSkeleton(pose.keypoints);
-            }
-        }
-    }
-
-    window.requestAnimationFrame(predictPoses);
+function drawKeypoint(keypoint){
+  ctx.fillStyle = 'Orange';
+  ctx.strokeStyle = 'Green';
+  ctx.lineWidth = 2;
+  const radius = 4; 
+  const circle = new Path2D();
+  circle.arc(keypoint.x, keypoint.y, radius, 0, 2 * Math.PI)
+  ctx.fill(circle)
+  ctx.stroke(circle)
 }
-
-function drawKeypoints(keypoints) {
-    ctx.fillStyle = 'Green';
-    ctx.strokeStyle = 'White';
-    ctx.lineWidth = 2;
-    for(let i=0; i<keypoints.length; i++) {
-        drawKeypoint(keypoints[i]);    
-    }
-}
-
-function drawKeypoint(keypoint) {
-    const radius = 4;
-    if (keypoint.score >= scoreThreshold) {
-      const circle = new Path2D();
-      circle.arc(keypoint.x, keypoint.y, radius, 0, 2 * Math.PI);
-      ctx.fill(circle);
-      ctx.stroke(circle);
-    }
-}
-
-/* function drawKeypointsColor(keypoints) {
-    const keypointInd = poseDetection.util.getKeypointIndexBySide(model);
-    ctx.strokeStyle = 'White';
-    ctx.lineWidth = 2;
-    ctx.fillStyle = 'Red';
-    for (const i of keypointInd.middle) {
-        drawKeypoint(keypoints[i]);
-    }
-    ctx.fillStyle = 'Green';
-    for (const i of keypointInd.left) {
-        drawKeypoint(keypoints[i]);
-    }
-    ctx.fillStyle = 'Orange';
-    for (const i of keypointInd.right) {
-        drawKeypoint(keypoints[i]);
-    }
-} */ 
-
-function drawSkeleton(keypoints) {
-    const color = "#fff";
-    ctx.fillStyle = color;
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-
-    poseDetection.util.getAdjacentPairs(model)
-        .forEach(([i, j]) => {
-            const kp1 = keypoints[i];
-            const kp2 = keypoints[j];
-            if (kp1.score >= scoreThreshold && kp2.score >= scoreThreshold) {
-                ctx.beginPath();
-                ctx.moveTo(kp1.x, kp1.y);
-                ctx.lineTo(kp2.x, kp2.y);
-                ctx.stroke();
-            }
-    });
-}
-
-async function app() {
-    //Load the model and create a detector object
-    await createDetector();
-
-    //Enable camera and activate video
-    await activateVideo();
-};
-
-app();
-
-
-
-
-
-
-
-
-
-
-
-

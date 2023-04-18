@@ -15,14 +15,18 @@ video {
   display: block;
 }
 
+#webcamButton {
+  color: blue;
+}
+
 section {
-  opacity: 1;
+  opacity: 1; 
   transition: opacity 500ms ease-in-out;
 }
 
 .removed {
   display: none;
-  z-index: -10;
+  /* z-index: -10; */
 }
 
 .invisible {
@@ -47,17 +51,19 @@ section {
   font-size: 12px;
 }
 
-#canvas {
-  position: absolute;
-  z-index: -100;
-  top: 0; 
-  bottom: 0; 
-  left: 0; 
-}
 
 .highlighter {
   background: rgba(0, 255, 0, 0.25);
   border: 1px dashed #fff;
   z-index: 1;
   position: absolute;
+}
+
+
+#canvas {
+  position: absolute;
+  z-index: -100;
+  top: 0; 
+  bottom: 0; 
+  left: 0; 
 }

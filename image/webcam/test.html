@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Movenet Tutorial</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./testStyle.css">
+</head>
+<body>
+  <h1>TensorFlow.js Hello World</h1>
+
+  <p id = "status"> Await tfjs load</p>
+  <video id="webcam" autoplay muted></video>
+    
+  <button id="enableCam">Enable Webcam</button>
+  <button class="dataCollector" data-1hot="0" data-name="Class 1">Gather Class 1 Data</button>
+  <button class="dataCollector" data-1hot="1" data-name="Class 2">Gather Class 2 Data</button>
+  <button id="train">Train &amp; Predict!</button>
+  <button id="reset">Reset</button>
+
+
+   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js" type="text/javascript"></script> 
+   <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>  -->
+  <script type="text/javascript" src="./testIndex.js"></script>
+</body>
+</html>

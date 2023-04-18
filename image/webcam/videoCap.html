@@ -3,6 +3,11 @@
 <head>
   <title>Webcam</title>
   <meta charset="UTF-8" content="application/javascript">
+  <link rel="stylesheet" href="style.css">
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script> -->
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
 </head>
 <body>
@@ -17,22 +22,32 @@
       <canvas id="canvas" width="640" height="480"></canvas>
     </div>
   </section>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script> 
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script> 
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose"></script> -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script> -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script> -->
-  <!-- imports tensorflow library -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js" type="text/javascript"></script>  -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script> 
+  <!-- imports tensorflow library -->
   <!-- Import coco-SSD model from tensorFlow.js prebuilt models-->
   <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script> -->
 
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
-    
+  
   <script type = "application/javascript" src = "./webcam.js" defer></script>
-  <!-- <script type = "module" src = "./test.js" defer></script> -->
+  <!-- <script type = "application/javascript" src = "./defaultTut.js" defer></script> -->
+
+  <!-- <script type = "application/javascript" src = "./holistic.js" defer></script> -->
+  <!-- <script type = "module" src = "./blazepose.js" defer></script> -->
+  <!-- <script type = "application/javascript "src = "./test.js" defer></script> -->
+  <!-- <script type = "application/javascript "src = "./test2.js" defer></script> -->
+  <!-- <script type = "application/javascript "src = "./test3.js" defer></script> -->
+  <!-- <script type = "application/javascript "src = "./test5.js" defer></script> -->
   
   <!-- <video id="webcam" autoplay playsinline width ="800" height = "600" ></video> -->
   <!-- <input type = "button" onclick = "loadUserVideo()" value = "Display"> -->
 </body>
 </html> 
+
 
