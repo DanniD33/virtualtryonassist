@@ -11,6 +11,7 @@ import express from "express";
 let app = express();
 import tf from "@tensorflow/tfjs-node";
 import loadModel from "../../tensorModel/model.js";
+// import sayHi from "../../tensorModel/model.js";
 import { fileURLToPath } from "url";
 // import webcam from '../image/webcam/webcam.js';
 import bodyParser from 'body-parser';
@@ -27,13 +28,18 @@ import path from "path";
 //   "Birthday": "April 2",
 //   "Cam" : "idle"
 // };
+
 const userController = {
   //get tryon cam
   getCamera(req,res, next){
           const __dirname = path.resolve();
-          res.sendFile(path.join(__dirname + '/image/webcam/videoCap.html'));
-          
+          res.sendFile(path.join(__dirname + '/image/webcam/holistic/index.html'));
+          // res.sendFile(path.join(__dirname + '/tensorModel/model.js'));
+          // loadModel();
+          // res.send(loadModel());
         }
+
+        // '/image/webcam/blazepose/pose-detection/demos/live_video'
   //add user
   //remove user
   //update info

@@ -4,6 +4,21 @@
 <div id="label-container"></div>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+const webcam = Document.getElementById('webcam-container');
+const label = Document.getElementById('label-container');
+
+//First Check to see if we are able to get webcam using getUserMedia 
+function getUserMediaSupported() {
+    return !!(navigator.mediaDevices &&
+      navigator.mediaDevices.getUserMedia);
+  }
+    //If we CAN get access to camera, create an event listener for our Try Me On button that once clicked, starts to run our function
+  if (getUserMediaSupported()) {
+    enableWebcamButton.addEventListener('click', enableCam);
+    //If we CANNOT get access to camera, send back a message saying not supported 
+  } else {
+    console.warn('getUserMedia() is not supported by your browser');
+  }
 
     // the link to model
     const URL = "./my_model/";

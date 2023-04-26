@@ -6,14 +6,14 @@
 
 import express from "express";
 import getusermedia from "getusermedia";
-import getCamera from "../server/controller/userController.js";
+import userController from "../server/controller/userController.js";
 // import loadUserVideo from "../image/webcam/webcam.js";
 //All routes in this file starts with /users
 //localhost:3000/users
 const router = express.Router();
 //get user
 // const successfullyGotUsers = router.get('/', getUser);
-const successfullyGotUsers = router.get('/', getCamera.getCamera);
+const successfullyGotUsers = router.get('/', userController.getCamera);
 
 // const generateSpecs = router.post('/mySpecs', mySize);
 // const userVideo = router.get('/userVideo', loadUserVideo);
