@@ -45,22 +45,62 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="./style.css">
 
+<!--
 
+  /*
+  
+  -----------------------------------------------------------------------------
+                            Add Model Apis
+  -----------------------------------------------------------------------------
+  
+  */
+  
+-->
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@mediapipe/holistic/holistic.js" crossorigin="anonymous"></script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/vision@0.1/vision.js"
+      crossorigin="anonymous"></script> -->
+
+
 </head>
+
+
+<!--
+
+  /*
+  
+  -----------------------------------------------------------------------------
+                      Create OutputCanvas and ImageCanvas
+  -----------------------------------------------------------------------------
+  
+  */
+  
+-->
+
 
 
 <body>
   <div class="container">
-    <video class="input_video"></video>
-    <canvas class="output_canvas" width="640px" height="480px"></canvas>
+    <div class="image">
+      <video class="input_video"></video>
+      <canvas class="output_canvas" width="640px" height="480px"></canvas>
+    </div>
   </div>
 
+<!--
 
-
+  /*
+  
+  -----------------------------------------------------------------------------
+                        Create Buttons for Selection 
+  -----------------------------------------------------------------------------
+  
+  */
+  
+-->
 
   <div class="itemSelection">Please Make a Selection
     
@@ -84,21 +124,52 @@
       </button>
       
       <button id="b6" type="submit">
-        <img src="items/shirts/teamshirt.png" alt="blackpants" border="0" />
+        <img class ="teamshirt" src="items/shirts/teamshirt.png" alt="red shirt" border="0" />
       </button>
       
       
     </div>
-    
+
+
+
+<!--
+
+  /*
+  
+  -----------------------------------------------------------------------
+                    JavaScript Starts Here (**Modularize later)
+  -----------------------------------------------------------------------
+  
+  */
+  
+-->
+
     
     <script type="module">
       
       const videoElement = document.getElementsByClassName('input_video')[0];
-      const canvasElement = document.getElementsByClassName('output_canvas')[0];
+      const canvasElement = document.getElementsByClassName('output_canvas')[0]
+      // const itemElement = document.getElementById('clothingLayer');
+      ;
       const canvasCtx = canvasElement.getContext('2d');
+      canvasCtx.width = canvasElement.width;
+      canvasCtx.height = canvasElement.height;
+      // const itemCtx = itemElement.getContext('2d');      
       
-      
-      
+
+
+
+
+
+
+/*
+
+-----------------------------------------------------------------------
+                   BUTTONS Start Here
+-----------------------------------------------------------------------
+
+*/
+
       const but1 = document.getElementById("b1");
       but1.style.zIndex = "1"; // bring button to front of canvas
       canvasElement.parentNode.appendChild(but1)
@@ -127,99 +198,236 @@
       
       
 
+/*
+
+-----------------------------------------------------------------------------
+                        Took out Segmentation mask
+-----------------------------------------------------------------------------
+
+*/
+
+// const img = new Image();
+// img.src = 'items/shirts/teamshirt.png';
+
+/*
+    
+---------------------------------------------------------------------------
+                  Run Prediction Using Holistic Model  
+---------------------------------------------------------------------------
+    
+*/
 
 
+    const holistic = new Holistic({locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
+  }});
+  holistic.setOptions({
+    modelComplexity: 1,
+    smoothLandmarks: true,
+    enableSegmentation: false,
+    smoothSegmentation: true,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5
+  });
+  holistic.onResults(onResults);
+  
+  
+  /*
+  
+  ---------------------------------------------------------------------------
+                        Initiate New Camera Instance
+  ---------------------------------------------------------------------------
+  
+  */
+ 
+ const camera = new Camera(videoElement, {
+   onFrame: async () => {
+     await holistic.send({image: videoElement});
+    },
+    width: 640,
+    height: 480
+  });
+  camera.start();
+  
+  
+    /*
+   
+   ---------------------------------------------------------------------------
+           We Can Now Work With What We Got From Our Prediction
+   ---------------------------------------------------------------------------
+   
+  */
 
 
+  
+  
   function onResults(results) {
+
     canvasCtx.save();
     canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(results.segmentationMask, 0, 0,
-                        canvasElement.width, canvasElement.height);
-  
-    // Only overwrite existing pixels.
-    canvasCtx.globalCompositeOperation = 'source-in';
-    canvasCtx.fillStyle = '#00FF00';
-    canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
+    // Draw segmentation mask over torso for shirt
+    // canvasCtx.drawImage(results.segmentationMask, 200, 200,
+    //                     250, 250);
+// Only overwrite existing pixels.
+    // canvasCtx.globalCompositeOperation = 'source-in';
+    // canvasCtx.fillStyle = 'purple';
+    // canvasCtx.fillRect(0, 0, canvasElement.width, canvasElement.height);
 
+
+
+
+
+    
+  /*
+   
+   ---------------------------------------------------------------------------
+                      Draw Output Video to Canvas
+   ---------------------------------------------------------------------------
+   
+  */
+  // canvasCtx.globalCompositeOperation = 'destination-atop';
+   canvasCtx.drawImage( results.image, 0, 0, canvasElement.width, canvasElement.height);
+   
+   
+       
+     let lshoulder = results.poseLandmarks[11] //let lshoulder =
+     let rbicep = results.poseLandmarks[13] //let lbicep =
+     let rshoulder = results.poseLandmarks[12] //let rshoulder =
+     let lbicep = results.poseLandmarks[14] //let rbicep =
+     let lhip = results.poseLandmarks[23] //let lhip =
+     let rhip = results.poseLandmarks[24] //let rhip = 
+/*  
+  ---------------------------------------------------------------------------
+             Attempting to Add Image As Filter Ontop of Canvas
+  ---------------------------------------------------------------------------
+   
+*/
+const filter = new Image(canvasElement.width, canvasElement.height);
+filter.src = 'items/shirts/teamshirt.png'
+
+
+
+
+
+// console.log(torsoPoints);
+// canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
   
-    // Only overwrite missing pixels.
-    canvasCtx.globalCompositeOperation = 'destination-atop';
-    canvasCtx.drawImage(
-        results.image, 0, 0, canvasElement.width, canvasElement.height);
+    
+    // //x,y,width,height
+    // let width = Math.abs(lshoulder.x - lshoulder.y)
+    // let height =  Math.abs(lshoulder.y - Math.min(lhip.y, rhip.y))
+
+
+    let torsoPoints = [
+    results.poseLandmarks[11]* canvasElement.width,
+    results.poseLandmarks[13]* canvasElement.width,
+    results.poseLandmarks[12]* canvasElement.width,
+    results.poseLandmarks[14]* canvasElement.width,
+    results.poseLandmarks[24]* canvasElement.width,
+    results.poseLandmarks[23]* canvasElement.width
+    ];
+
+    
+    // canvasCtx.strokeStyle = 'purple';
+    // canvasCtx.strokeWidth = 3;
+    // canvasCtx.strokeRect(torsoRect.x, torsoRect.y, torsoRect.width, torsoRect.height);
   
+    // console.log(lshoulder.x * canvasElement.width, lshoulder.y *canvasElement.height)
+    
+    // let frx = 0
+    // let fry = 0
+
+
+
+    // let frx = lshoulder.x * canvasElement.width
+    // let fry = lshoulder.y * canvasElement.height
+    // console.log(frx, fry);
+    
+    // let fx = lshoulder.x; 
+    // let fy = lshoulder.y;
+    
+    // let scale = Math.min(canvasElement.width / filter.width, canvasElement.height / filter.height);
+
+
+  const loop = () => {
+    // canvasCtx.clearRect(0,0,canvasElement.width, canvasElement.height);
+    // let nw = filter.width * scale;
+    // let nh = filter.height * scale;
+    
+    
+    // let px = (lshoulder.x * (canvasElement.width / 2) - (nw / 2));
+    // let py = (lshoulder.y * (canvasElement.height / 2) - (nh / 2));
+
+    // let fw = Math.min(filter.width, canvasElement.width);
+    // let fh = Math.min(filter.height, canvasElement.height);
+
+    // //get middle of shoulders aka the spine
+    // let spinex = (lshoulder.x + rshoulder.x) / 2
+    // let spiney = (lshoulder.y + rshoulder.y) / 2
+
+    // //get middle of image and draw it
+    // let filterx = filter.width / 2
+
+    let px = ((lshoulder.x * filter.width) - filter.width) * 2
+    let py = ((lshoulder.y * filter.height) - filter.height) * 2  
+
+
+
+    // let px = ((spinex * filter.width) - filter.width) / 2
+    // let py = ((spiney * filter.height) - filter.height) / 2  
+      
+
+      // console.log(filter.width, filter.height)
+      // console.log('logging coordinates', px, py)
+      // const scale = filter.height/filter.width;
+      canvasCtx.drawImage(filter, px, py);
+
+
+      // canvasCtx.drawImage(filter, px, py);
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+
+  // canvasCtx.drawImage(maskImg, x, y, width, height);
+  // console.log(results.poseLandmarks[23])
+// };
+//an array of arrays, each sub array is an x and y coordinate of position
+    // let torso = []
+    // // 11 -> 12 , 11 -> 13, 12 -> 14, 12 -> 24, 11 -> 23, 23 -> 24
+    // let torsoPoints = [
+    //   POSE_CONNECTIONS[9],
+    //   POSE_CONNECTIONS[10],
+    //   POSE_CONNECTIONS[16],
+    //   POSE_CONNECTIONS[23],
+    //   POSE_CONNECTIONS[22],
+    //   POSE_CONNECTIONS[24]
+    // ];
+
+    // let torsoPoints = [
+    //  rshoulder =  results.poseLandmarks[10],
+    //  rbicep = results.poseLandmarks[12],
+    //  lshoulder = results.poseLandmarks[11],
+    //  lbicep = results.poseLandmarks[13],
+    //  lhip = results.poseLandmarks[22],
+    //  rhip = results.poseLandmarks[23]
+    // ];
+
+
+  // console.log(results.poseLandmarks[10].y)
+    // const options = {
+    //   upperBodyOnly: true,
+    // }
+
+
+
+    // drawConnectors(canvasCtx,results.poseLandmarks, torsoPoints, {color: 'purple', lineWidth: 20});
+    // drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {color: 'purple', lineWidth: 20})
+    // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
     canvasCtx.globalCompositeOperation = 'source-over';
 
-
-
-
-
-
-
-
-
-
-
-//create an object with paths
-
-// const selections = {
-//         "blackpants": 'items/bottoms/blackpants2.png',
-//         "bluepants": 'items/bottoms/bluepants.png',
-//         "pinkskirt": 'items/bottoms/pinkskirt.png',
-//         "stripedshirt": 'items/shirts/stripedshirt.png',
-//         "basicgreentee": 'items/shirts/basicgreentee.png',
-//         "teamshirt": 'items/shirts/teamshirt.png'
-//       }
-
-// let item = Object.keys(selections)
-
-// console.log(item);
-
-
-
-
-
-
-
-
-
-
-    const maskImg = new Image();
-    // maskImg.src = selections['pinkskirt'];    
-    maskImg.src = 'items/bottoms/pinkskirt.png';
-// Wait for the image to load
-
-but3.onclick = () => {
-  drawMask(results.poseLandmarks);
-}
-// const but3 = document.getElementById("b3");
-//   but3.style.zIndex = "1"; // bring button to front of canvas
-//     canvasElement.parentNode.appendChild(but3)
-
-
-// Function to draw the mask onto the canvas
-function drawMask(poseLandmarks) {
-  // Calculate the dimensions of the mask based on the facial landmarks
-  const x = results.poseLandmarks[23][0];
-  const y = results.poseLandmarks[23][1];
-  const width = results.poseLandmarks[27][0] - results.poseLandmarks[23][0];
-  const height = results.poseLandmarks[25][1] - results.poseLandmarks[23][1];
-  
-  maskImg.style.position = 'absolute';
-  maskImg.style.zIndex = "1"; // bring button to front of canvas
-  canvasElement.parentNode.appendChild(maskImg)
-  // Draw the mask onto the canvas
-  canvasCtx.drawImage(maskImg, x, y, width, height);
-
-}
-
-
-
-
-    // console.log(results.poseLandmarks);
-    
-    
-    
     drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
                    {color: '#00FF00', lineWidth: 4});
     drawLandmarks(canvasCtx, results.poseLandmarks,
@@ -236,29 +444,6 @@ function drawMask(poseLandmarks) {
                   {color: '#FF0000', lineWidth: 2});
     canvasCtx.restore();
   }
-  
-  const holistic = new Holistic({locateFile: (file) => {
-    return `https://cdn.jsdelivr.net/npm/@mediapipe/holistic/${file}`;
-  }});
-  holistic.setOptions({
-    modelComplexity: 1,
-    smoothLandmarks: true,
-    enableSegmentation: true,
-    smoothSegmentation: true,
-    refineFaceLandmarks: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5
-  });
-  holistic.onResults(onResults);
-  
-  const camera = new Camera(videoElement, {
-    onFrame: async () => {
-      await holistic.send({image: videoElement});
-    },
-    width: 640,
-    height: 480
-  });
-  camera.start();
 
 
   </script>
