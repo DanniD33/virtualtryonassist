@@ -24,6 +24,7 @@
     "canvas": "^2.11.2",
     "express": "^4.18.2",
     "getusermedia": "^2.0.1",
+    "git": "^0.1.5",
     "nodemon": "^2.0.21"
   },
   "dependencies": {
