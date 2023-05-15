@@ -106,3 +106,392 @@ const videoElement = document.getElementsByClassName('input_video')[0];
     height: 480
   });
   camera.start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // function draw() {
+//   var ctx = document.getElementById('canvas').getContext('2d');
+//   var img = new Image();
+//   img.onload = function() {
+//     ctx.drawImage(img, 0, 0);
+//   };
+//   img.src = '/files/4531/backdrop.png';
+// }
+
+
+// console.log(torsoPoints);
+// canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  
+    
+    // //x,y,width,height
+    // let width = Math.abs(lshoulder.x - lshoulder.y)
+    // let height =  Math.abs(lshoulder.y - Math.min(lhip.y, rhip.y))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // canvasCtx.strokeStyle = 'purple';
+    // canvasCtx.strokeWidth = 3;
+    // canvasCtx.strokeRect(torsoRect.x, torsoRect.y, torsoRect.width, torsoRect.height);
+  
+    // console.log(lshoulder.x * canvasElement.width, lshoulder.y *canvasElement.height)
+    
+    // let frx = 0
+    // let fry = 0
+
+
+
+    // let frx = lshoulder.x * canvasElement.width
+    // let fry = lshoulder.y * canvasElement.height
+    // console.log(frx, fry);
+    
+    // let fx = lshoulder.x; 
+    // let fy = lshoulder.y;
+    
+    // let scale = Math.min(canvasElement.width / filter.width, canvasElement.height / filter.height);
+
+    // canvasCtx.clearRect(0,0,canvasElement.width, canvasElement.height);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // let nw = filter.width * scale;
+    // let nh = filter.height * scale;
+    
+    
+    // let px = (lshoulder.x * (canvasElement.width / 2) - (nw / 2));
+    // let py = (lshoulder.y * (canvasElement.height / 2) - (nh / 2));
+
+    // let fw = Math.min(filter.width, canvasElement.width);
+    // let fh = Math.min(filter.height, canvasElement.height);
+    
+    // //get middle of shoulders aka the spine
+
+
+    // let spinex = (lshoulder.x + rshoulder.x) / 2
+    // let spiney = (lshoulder.y + rshoulder.y) / 2
+    
+    // //get middle of image and draw it
+    // let filterx = filter.width / 2
+    
+    // let px = ((lshoulder.x * filter.width) - filter.width) * 2
+    // let py = ((lshoulder.y * filter.height) - filter.height) * 2  
+  
+
+//     const filter = new Image();
+// filter.src = 'items/shirts/teamshirt.png'
+
+    // let px = ((spinex * filter.width) - filter.width) / 2
+    // let py = ((spiney * filter.height) - filter.height) / 2 
+      
+
+
+
+    // let scale_factor = Math.min(canvas.width / img.width, canvas.height / img.height);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     // let px = filter.naturalWidth / 4
+    // let py = filter.naturalHeight / 4 
+
+      // console.log(filter.width, filter.height)
+      // console.log('logging coordinates', px, py)
+      // const scale = filter.height/filter.width;
+      
+
+
+      //draw rectangle around shoulders
+      // canvasCtx.strokeRect(200,200, 100,100)
+      // canvasCtx.strokeStyle = 'purple';
+      // canvasCtx.strokeRect(Math.abs(lshoulder.x), Math.abs(lshoulder.y), Math.abs(rshoulder.x - lshoulder.x), Math.abs(rshoulder.y - lshoulder.y));
+
+      // let torsoH = (rshoulder.x - lshoulder.x) * (filter.height/filter.width)
+        // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      // b6.onclick = () => {
+
+        //   canvasCtx.save()
+      // filter.onload = function() {
+
+        // b6.onclick = function() {
+        // const loadFilter = () => {
+
+        // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+        // // canvasCtx.drawImage(filter, px, py, rshoulder.x - lshoulder.x, torsoH);  
+        
+        // // canvasCtx.drawImage(filter, 0, 0, 1000, 1000);  
+        // // canvasCtx.drawImage(filter, px, py);  
+        
+        //   console.log('image loaded', px , py, filter.width, filter.height)
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // }
+
+        // filter.onload = loadFilter();
+
+        // filter.style = "width: 100%"
+        // console.log('image loaded', px , py, filter.width, filter.height)
+      // }
+      // };
+    // filter.src = 'items/shirts/teamshirt.png'
+      
+      // filter.src = 'items/shirts/teamshirt.png'
+
+      // canvasCtx.drawImage(filter, px, py);
+      // filter.scale(.5, .5)
+
+      // canvasCtx.drawImage(filter, px, py);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       // b6.onclick = loop();
+
+  // canvasCtx.drawImage(maskImg, x, y, width, height);
+  // console.log(results.poseLandmarks[23])
+// };
+//an array of arrays, each sub array is an x and y coordinate of position
+    // let torso = []
+    // // 11 -> 12 , 11 -> 13, 12 -> 14, 12 -> 24, 11 -> 23, 23 -> 24
+    // let torsoPoints = [
+    //   POSE_CONNECTIONS[9],
+    //   POSE_CONNECTIONS[10],
+    //   POSE_CONNECTIONS[16],
+    //   POSE_CONNECTIONS[23],
+    //   POSE_CONNECTIONS[22],
+    //   POSE_CONNECTIONS[24]
+    // ];
+
+    // let torsoPoints = [
+    //  rshoulder =  results.poseLandmarks[10],
+    //  rbicep = results.poseLandmarks[12],
+    //  lshoulder = results.poseLandmarks[11],
+    //  lbicep = results.poseLandmarks[13],
+    //  lhip = results.poseLandmarks[22],
+    //  rhip = results.poseLandmarks[23]
+    // ];
+
+
+  // console.log(results.poseLandmarks[10].y)
+    // const options = {
+    //   upperBodyOnly: true,
+    // }
+
+
+
+    // drawConnectors(canvasCtx,results.poseLandmarks, torsoPoints, {color: 'purple', lineWidth: 20});
+    // drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {color: 'purple', lineWidth: 20})
+    // canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
